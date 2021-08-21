@@ -9,6 +9,7 @@ import "./index.css";
 
 import App from "./App";
 import Home from "./components/home";
+import Profile from "./components/profile";
 
 const history = createBrowserHistory();
 
@@ -23,7 +24,8 @@ ReactDOM.render(
       >
         <Switch>
           <Route exact={true} path={"/"} component={App} />
-          <Route path={"/dashboard"} component={Home} />
+          <Route exact={true} path={"/dashboard"} component={Home} />
+          <Route exact={true} path={"/dashboard/profile"} component={Profile} />
         </Switch>
       </MoralisProvider>
     </React.StrictMode>
