@@ -5,7 +5,7 @@ import "./App.css";
 import { useMoralis } from "react-moralis";
 
 function App() {
-  const { authenticate, isAuthenticated, user } = useMoralis();
+  const { authenticate, isAuthenticated, logout, user } = useMoralis();
 
   if (!isAuthenticated) {
     return (
@@ -34,6 +34,7 @@ function App() {
   return (
     <div className='App'>
       <h1>Welcome {user.get("username")}</h1>
+      <button onClick={() => logout()}>Logout</button>
     </div>
   );
 }
