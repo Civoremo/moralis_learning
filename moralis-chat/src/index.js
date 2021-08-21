@@ -2,21 +2,32 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-
+import { Router, Route, Switch } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import { MoralisProvider } from "react-moralis";
+import "./index.css";
+
+import App from "./App";
+import Home from "./components/home";
+
+const history = createBrowserHistory();
+
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MoralisProvider
-      appId={process.env.REACT_APP_MORALIS_ID}
-      serverUrl={process.env.REACT_APP_MORALIS_SERVER_URL}
-    >
-      <App />
-    </MoralisProvider>
-  </React.StrictMode>,
+  <Router history={history}>
+    <React.StrictMode>
+      <MoralisProvider
+        appId={process.env.REACT_APP_MORALIS_ID}
+        serverUrl={process.env.REACT_APP_MORALIS_SERVER_URL}
+      >
+        <Switch>
+          <Route exact={true} path={"/"} component={App} />
+          <Route path={"/dashboard"} component={Home} />
+        </Switch>
+      </MoralisProvider>
+    </React.StrictMode>
+  </Router>,
   document.getElementById("root")
 );
 
