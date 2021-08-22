@@ -19,6 +19,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
       <h4>Group Chats</h4>
       <div>
         {groupChatsData.map((group, index) => {
+          console.log("GROUPCHAT", group);
           return (
             <div key={group.name} onClick={event => setGroupId(index)}>
               {group.name}
