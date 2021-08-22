@@ -35,7 +35,7 @@ const ChatMessages = ({ groupId }) => {
 
   useEffect(() => {
     queryMessages();
-  }, [groupId, createdNew]);
+  }, [groupId, createdNew]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!messages) {
     return <></>;
