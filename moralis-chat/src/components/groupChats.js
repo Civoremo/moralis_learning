@@ -1,27 +1,26 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const GroupChats = ({ queryData }) => {
-  if (!queryData) {
+const GroupChats = ({ queryData, setGroupId }) => {
+  const [groupChatsData, setGroupChatsData] = useState(null);
+
+  useEffect(() => {
+    setGroupChatsData(JSON.parse(queryData));
+  }, [queryData]);
+
+  if (!groupChatsData) {
     return <>Waiting for data to load</>;
   }
   let groups = JSON.parse(queryData);
 
-  const changeGroup = e => {
-    e.preventDefault();
-    console.log("changing room");
-  };
-
   return (
     <div>
-      {/* {console.log("group names", JSON.stringify(queryData))} */}
-      {console.log(groups)}
       <h4>Group Chats</h4>
       <div>
-        {groups.map(group => {
+        {groupChatsData.map((group, index) => {
           return (
-            <div key={group.name} onClick={event => changeGroup(event)}>
+            <div key={group.name} onClick={event => setGroupId(index)}>
               {group.name}
             </div>
           );
