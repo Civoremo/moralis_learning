@@ -5,7 +5,9 @@ import { useNewMoralisObject } from "react-moralis";
 
 const NewGroup = () => {
   const [groupNameInput, setGroupNameInput] = useState("");
-  const { isSaving, error, save } = useNewMoralisObject("GroupChats");
+  const groupChat = useNewMoralisObject("GroupChats");
+  const chatMessage = useNewMoralisObject("ChatMessages");
+  //   const { isSaving, error, save } = useNewMoralisObject("GroupChats");
 
   const addNewGroup = e => {
     e.preventDefault();
@@ -16,14 +18,30 @@ const NewGroup = () => {
       //   newGroupChat.save().then(result => {
       //     console.log("saved result");
       //   });
-      save({ name: groupNameInput }).then(
-        result => {
-          console.log("saved result", result);
-        },
-        err => {
-          console.log("saved error", err);
-        }
-      );
+      groupChat
+        .save({ name: groupNameInput })
+        .then(
+          result => {
+            //   console.log("saved result", result);
+            return result;
+          },
+          err => {
+            console.log("saved error", err);
+          }
+        )
+        .then(group => {
+          console.log("saved group", group);
+          chatMessage
+            .save({ message: `Welcome to ${groupNameInput}`, chatId: group.id })
+            .then(
+              result => {
+                console.log("groups first message", result);
+              },
+              error => {
+                console.log("failed to save first group message");
+              }
+            );
+        });
     }
   };
 

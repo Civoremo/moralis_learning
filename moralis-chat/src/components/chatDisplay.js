@@ -1,12 +1,20 @@
 /** @format */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useMoralisQuery } from "react-moralis";
 
 import GroupChats from "./groupChats";
+import ChatMessages from "./chatMessages";
 
 const ChatDisplay = () => {
-  const { data, error, isLoading } = useMoralisQuery("GroupChats");
+  const groupChatsQuery = useMoralisQuery("GroupChats", query => query, [], {
+    live: true,
+  });
+  const [groupChatId, setGroupChatId] = useState(null);
+
+  useEffect(() => {
+    console.log("new group chat was created");
+  }, [groupChatsQuery.data]);
 
   return (
     <div
@@ -17,8 +25,7 @@ const ChatDisplay = () => {
         display: "flex",
       }}
     >
-      {/* {console.log("query result", JSON.stringify(data, null, 2))} */}
-      {data ? (
+      {groupChatsQuery.data ? (
         <div
           style={{
             width: "30%",
@@ -26,13 +33,20 @@ const ChatDisplay = () => {
             margin: "0 20px",
           }}
         >
-          <GroupChats queryData={JSON.stringify(data, null, 2)} />
+          <GroupChats
+            queryData={JSON.stringify(groupChatsQuery.data, null, 2)}
+            setGroupId={setGroupChatId}
+          />
         </div>
       ) : (
         <>Loading</>
       )}
 
-      <div>chat display component</div>
+      {groupChatId !== null ? (
+        <ChatMessages groupId={groupChatsQuery.data[groupChatId].id} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
