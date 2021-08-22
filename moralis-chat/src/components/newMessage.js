@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useNewMoralisObject } from "react-moralis";
 import "boxicons";
 
-const NewMessage = ({ chatId }) => {
+const NewMessage = ({ chatId, setNewMsg }) => {
   const [newMessageInput, setNewMessageInput] = useState("");
   const saveNewMessage = useNewMoralisObject("ChatMessages");
 
@@ -13,7 +13,8 @@ const NewMessage = ({ chatId }) => {
     console.log("send message", newMessageInput);
     saveNewMessage.save({ message: newMessageInput, chatId: chatId }).then(
       result => {
-        console.log("user typed new message", result);
+        // console.log("user typed new message", result);
+        setNewMsg(JSON.stringify(result, null, 2));
       },
       error => {
         console.log("failed to save USER new message");

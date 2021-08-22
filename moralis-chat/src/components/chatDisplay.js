@@ -11,6 +11,7 @@ const ChatDisplay = () => {
     live: true,
   });
   const [groupChatId, setGroupChatId] = useState(null);
+  const [receivedNewMessage, setReceivedNewMessage] = useState(null);
 
   useEffect(() => {
     console.log("new group chat was created");

@@ -1,35 +1,34 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { useMoralisQuery } from "react-moralis";
+import { Moralis } from "moralis";
 
 import NewMessage from "./newMessage";
 
 const ChatMessages = ({ groupId }) => {
-  const chatMessages = useMoralisQuery("ChatMessages", query => query, [], {
-    live: true,
-  });
   const [messages, setMessages] = useState(null);
+  const [createMessage, setCreateMessage] = useState(0);
 
-  //   const { data, error, isLoading } = useMoralisQuery("ChatMessages", query => {
-  //     query.get(groupId);
-  //   });
+  const queryMessages = async () => {
+    const Messages = Moralis.Object.extend("ChatMessages");
+    const query = new Moralis.Query(Messages);
+    query.equalTo("chatId", groupId);
+    const result = await query
+      .find()
+      .then(result => JSON.stringify(result, null, 2))
+      .then(result => JSON.parse(result));
+
+    setMessages(result);
+
+    console.log("RESULT", result);
+  };
+
   useEffect(() => {
-    console.log(JSON.stringify(chatMessages.data, null, 2));
-    let msgs = JSON.stringify(chatMessages.data, null, 2);
-    let parsedMsgs = JSON.parse(msgs);
-
-    let filteredMsgs = parsedMsgs.filter(message => {
-      if (message.chatId === groupId) {
-        return message;
-      }
-    });
-
-    setMessages(filteredMsgs);
-  }, [chatMessages.data, groupId]);
+    queryMessages();
+  }, [groupId, createMessage]);
 
   if (!messages) {
-    return <>Loading</>;
+    return <></>;
   }
 
   return (
@@ -42,14 +41,32 @@ const ChatMessages = ({ groupId }) => {
         width: "55%",
       }}
     >
-      {console.log("chat id", groupId)}
-      {console.log("messages", messages)}
-      <div style={{ overflowY: "scroll" }}>
+      <div
+        style={{
+          overflowY: "scroll",
+          //   border: "1px solid blue",
+          height: "90%",
+          maxHeight: "90%",
+        }}
+      >
         {messages.map(message => {
-          return <div key={message.objectId}>{message.message}</div>;
+          return (
+            <div
+              key={message.objectId}
+              style={{
+                padding: "5px 5px",
+                marginBottom: "5px",
+                border: "1px solid grey",
+                borderRadius: "5px",
+                fontSize: "12px",
+              }}
+            >
+              {message.message}
+            </div>
+          );
         })}
       </div>
-      <NewMessage chatId={groupId} />
+      <NewMessage chatId={groupId} setNewMsg={setCreateMessage} />
     </div>
   );
 };
