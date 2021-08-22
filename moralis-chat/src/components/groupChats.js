@@ -12,7 +12,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
   if (!groupChatsData) {
     return <>Waiting for data to load</>;
   }
-  let groups = JSON.parse(queryData);
+  // let groups = JSON.parse(queryData);
 
   return (
     <div>

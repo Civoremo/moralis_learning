@@ -30,12 +30,13 @@ const NewGroup = () => {
           }
         )
         .then(group => {
-          console.log("saved group", group);
+          // console.log("saved group", group);
           chatMessage
             .save({ message: `Welcome to ${groupNameInput}`, chatId: group.id })
             .then(
               result => {
-                console.log("groups first message", result);
+                // console.log("groups first message", result);
+                setGroupNameInput("");
               },
               error => {
                 console.log("failed to save first group message");

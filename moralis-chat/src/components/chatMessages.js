@@ -1,13 +1,26 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import { useMoralisSubscription } from "react-moralis";
 import { Moralis } from "moralis";
 
 import NewMessage from "./newMessage";
 
 const ChatMessages = ({ groupId }) => {
   const [messages, setMessages] = useState(null);
-  const [createMessage, setCreateMessage] = useState(0);
+  const [createdNew, setCreatedNew] = useState(null);
+
+  useMoralisSubscription(
+    "ChatMessages",
+    q => q.equalTo("chatId", groupId),
+    [],
+    {
+      onCreate: data => {
+        // console.log("newly created message", JSON.stringify(data, null, 2));
+        setCreatedNew(JSON.stringify(data, null, 2));
+      },
+    }
+  );
 
   const queryMessages = async () => {
     const Messages = Moralis.Object.extend("ChatMessages");
@@ -17,15 +30,12 @@ const ChatMessages = ({ groupId }) => {
       .find()
       .then(result => JSON.stringify(result, null, 2))
       .then(result => JSON.parse(result));
-
     setMessages(result);
-
-    console.log("RESULT", result);
   };
 
   useEffect(() => {
     queryMessages();
-  }, [groupId, createMessage]);
+  }, [groupId, createdNew]);
 
   if (!messages) {
     return <></>;
@@ -66,7 +76,7 @@ const ChatMessages = ({ groupId }) => {
           );
         })}
       </div>
-      <NewMessage chatId={groupId} setNewMsg={setCreateMessage} />
+      <NewMessage chatId={groupId} />
     </div>
   );
 };
