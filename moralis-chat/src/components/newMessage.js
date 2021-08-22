@@ -10,7 +10,7 @@ const NewMessage = ({ chatId, setNewMsg }) => {
 
   const sendMessage = e => {
     e.preventDefault();
-    console.log("send message", newMessageInput);
+    // console.log("send message", newMessageInput);
     saveNewMessage.save({ message: newMessageInput, chatId: chatId }).then(
       result => {
         // console.log("user typed new message", result);

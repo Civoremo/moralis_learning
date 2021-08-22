@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { useHistory, Link } from "react-router-dom";
 import "boxicons";
