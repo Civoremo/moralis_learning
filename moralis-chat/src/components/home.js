@@ -26,6 +26,7 @@ const Home = () => {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
+      {console.log("user info", user.get("ethAddress"))}
       <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >

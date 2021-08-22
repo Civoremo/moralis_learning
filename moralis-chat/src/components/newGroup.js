@@ -7,22 +7,15 @@ const NewGroup = () => {
   const [groupNameInput, setGroupNameInput] = useState("");
   const groupChat = useNewMoralisObject("GroupChats");
   const chatMessage = useNewMoralisObject("ChatMessages");
-  //   const { isSaving, error, save } = useNewMoralisObject("GroupChats");
 
   const addNewGroup = e => {
     e.preventDefault();
     if (groupNameInput) {
-      //   const NewGroupChat = Moralis.Object.extend("GroupChat");
-      //   const newGroupChat = new NewGroupChat();
-      //   newGroupChat.set("name", groupNameInput);
-      //   newGroupChat.save().then(result => {
-      //     console.log("saved result");
       //   });
       groupChat
         .save({ name: groupNameInput })
         .then(
           result => {
-            //   console.log("saved result", result);
             return result;
           },
           err => {
@@ -30,12 +23,10 @@ const NewGroup = () => {
           }
         )
         .then(group => {
-          // console.log("saved group", group);
           chatMessage
             .save({ message: `Welcome to ${groupNameInput}`, chatId: group.id })
             .then(
               result => {
-                // console.log("groups first message", result);
                 setGroupNameInput("");
               },
               error => {
@@ -49,13 +40,15 @@ const NewGroup = () => {
   return (
     <div>
       <div>
-        <input
-          type='text'
-          placeholder='Enter New Group Name'
-          value={groupNameInput}
-          onChange={event => setGroupNameInput(event.target.value)}
-        />
-        <button onClick={event => addNewGroup(event)}>Add Group</button>
+        <form onSubmit={event => addNewGroup(event)}>
+          <input
+            type='text'
+            placeholder='Enter New Group Name'
+            value={groupNameInput}
+            onChange={event => setGroupNameInput(event.target.value)}
+          />
+          <button onClick={event => addNewGroup(event)}>Add Group</button>
+        </form>
       </div>
     </div>
   );
