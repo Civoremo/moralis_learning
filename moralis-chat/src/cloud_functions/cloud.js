@@ -11,6 +11,14 @@ Moralis.Cloud.define("addNewGroupChat", async req => {
   return result;
 });
 
-// Moralis.Cloud.define("userBalances", async req => {
-//     let userAccountBalances = await Moralis.Web3API.account.
-// });
+Moralis.Cloud.define("queryMessages", async req => {
+  let result = await queryMessages(req);
+
+  return result;
+});
+
+Moralis.Cloud.define("saveNewMessage", async req => {
+  let result = await saveMessage(req);
+
+  return result;
+});
