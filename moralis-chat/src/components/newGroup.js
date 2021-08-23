@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useNewMoralisObject, useMoralis } from "react-moralis";
-import { Moralis } from "moralis";
+// import { Moralis } from "moralis";
 
 const NewGroup = () => {
   const [groupNameInput, setGroupNameInput] = useState("");
