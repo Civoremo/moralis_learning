@@ -9,6 +9,7 @@ import NewMessage from "./newMessage";
 const ChatMessages = ({ groupId }) => {
   const [messages, setMessages] = useState(null);
   const [createdNew, setCreatedNew] = useState(null);
+  const [groupChatData, setGroupChatData] = useState(null);
 
   useMoralisSubscription(
     "ChatMessages",
@@ -16,26 +17,67 @@ const ChatMessages = ({ groupId }) => {
     [],
     {
       onCreate: data => {
-        // console.log("newly created message", JSON.stringify(data, null, 2));
         setCreatedNew(JSON.stringify(data, null, 2));
       },
     }
   );
 
-  const queryMessages = async () => {
-    const Messages = Moralis.Object.extend("ChatMessages");
-    const query = new Moralis.Query(Messages);
-    query.equalTo("chatId", groupId);
+  const queryChat = async () => {
+    const Chat = Moralis.Object.extend("GroupChats");
+    const query = new Moralis.Query(Chat);
+    query.equalTo("objectId", groupId);
     const result = await query
       .find()
       .then(result => JSON.stringify(result, null, 2))
       .then(result => JSON.parse(result));
-    setMessages(result);
+    setGroupChatData(result);
+    return result;
+  };
+
+  const queryMessages = async () => {
+    const chatResult = await queryChat();
+    // console.log("CHAT RESULT", chatResult);
+
+    if (!chatResult[0].private) {
+      const Messages = Moralis.Object.extend("ChatMessages");
+      const query = new Moralis.Query(Messages);
+      query.equalTo("chatId", groupId);
+      const result = await query
+        .find()
+        .then(result => JSON.stringify(result, null, 2))
+        .then(result => JSON.parse(result));
+      setMessages(result);
+    } else {
+      console.log("CHAT IS PRIVATE");
+      setMessages(null);
+    }
   };
 
   useEffect(() => {
+    console.log(groupId);
     queryMessages();
   }, [groupId, createdNew]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!groupChatData) {
+    return <></>;
+  }
+
+  if (groupChatData[0].private && groupChatData) {
+    return (
+      <div
+        style={{
+          width: "55%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bolder",
+          fontSize: "20px",
+        }}
+      >
+        <div>Restricted Chat</div>
+      </div>
+    );
+  }
 
   if (!messages) {
     return <></>;

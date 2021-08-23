@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import "boxicons";
 
 const GroupChats = ({ queryData, setGroupId }) => {
   const [groupChatsData, setGroupChatsData] = useState(null);
@@ -19,10 +20,17 @@ const GroupChats = ({ queryData, setGroupId }) => {
       <h4>Group Chats</h4>
       <div>
         {groupChatsData.map((group, index) => {
-          console.log("GROUPCHAT", group);
+          // console.log("GROUPCHAT", group);
           return (
             <div key={group.name} onClick={event => setGroupId(index)}>
-              {group.name}
+              {group.name}{" "}
+              {group.private ? (
+                <box-icon
+                  style={{ width: "15px", height: "auto" }}
+                  type='regular'
+                  name='lock'
+                />
+              ) : null}
             </div>
           );
         })}

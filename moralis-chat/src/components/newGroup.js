@@ -24,6 +24,10 @@ const NewGroup = () => {
   const chatMessage = useNewMoralisObject("ChatMessages");
   const { user } = useMoralis();
 
+  // const queryGroupChatsForDuplicates = () => {
+  //   console.log();
+  // };
+
   const addNewGroup = e => {
     e.preventDefault();
     if (groupNameInput && groupNameInput.length > 2) {
@@ -232,10 +236,10 @@ const NewGroup = () => {
                 type='checkbox'
                 id='restriction'
                 name='restrictBox'
-                onChange={() => (
-                  setRestrictCheck(restrictCheck => !restrictCheck),
-                  showRestricted()
-                )}
+                onChange={() => {
+                  setRestrictCheck(restrictCheck => !restrictCheck);
+                  showRestricted();
+                }}
               />
               <label htmlFor='restrictBox'>Restrictions</label>
             </>
