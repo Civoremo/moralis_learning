@@ -236,10 +236,10 @@ const NewGroup = () => {
                 type='checkbox'
                 id='restriction'
                 name='restrictBox'
-                onChange={() => (
-                  setRestrictCheck(restrictCheck => !restrictCheck),
-                  showRestricted()
-                )}
+                onChange={() => {
+                  setRestrictCheck(restrictCheck => !restrictCheck);
+                  showRestricted();
+                }}
               />
               <label htmlFor='restrictBox'>Restrictions</label>
             </>

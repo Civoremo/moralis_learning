@@ -46,7 +46,23 @@ const ChatDisplay = () => {
       {groupChatId !== null ? (
         <ChatMessages groupId={groupChatsQuery.data[groupChatId].id} />
       ) : (
-        <></>
+        <>
+          <div
+            style={{
+              width: "55%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              fontWeight: "bolder",
+              fontSize: "20px",
+            }}
+          >
+            <div>Welcome to Web3 Chat</div>
+            <div>built using</div>
+            <div>Moralis</div>
+          </div>
+        </>
       )}
     </div>
   );
