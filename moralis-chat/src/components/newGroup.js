@@ -24,6 +24,10 @@ const NewGroup = () => {
   const chatMessage = useNewMoralisObject("ChatMessages");
   const { user } = useMoralis();
 
+  // const queryGroupChatsForDuplicates = () => {
+  //   console.log();
+  // };
+
   const addNewGroup = e => {
     e.preventDefault();
     if (groupNameInput && groupNameInput.length > 2) {
