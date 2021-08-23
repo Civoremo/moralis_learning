@@ -7,6 +7,7 @@ import { Moralis } from "moralis";
 import NewMessage from "./newMessage";
 
 const ChatMessages = ({ groupId }) => {
+  // const { user } = useMoralis();
   const [messages, setMessages] = useState(null);
   const [createdNew, setCreatedNew] = useState(null);
   const [groupChatData, setGroupChatData] = useState(null);
@@ -34,6 +35,60 @@ const ChatMessages = ({ groupId }) => {
     return result;
   };
 
+  const gatherTokenBalances = async () => {
+    const ethBalance = await Moralis.Web3.getERC20({ chain: "eth" });
+    const bscBalance = await Moralis.Web3.getERC20({ chain: "bsc" });
+    const polyBalance = await Moralis.Web3.getERC20({ chain: "polygon" });
+    const userEthNFTs = await Moralis.Web3API.account.getNFTs();
+
+    return { ethBalance, bscBalance, polyBalance, nftToken: userEthNFTs };
+  };
+
+  const checkUserPrivilege = async (checkResult, chatResult) => {
+    // console.log("result came back as USER accepted");
+    let checks = {
+      ethBalance: false,
+      bscBalance: false,
+      polyBalance: false,
+      nftToken: false,
+    };
+
+    // console.log("RESULTS", checkResult);
+    for (let item in checkResult) {
+      // console.log(checkResult[item], chatResult[0][item]);
+      if (chatResult[0][item] === null) {
+        // console.log(
+        //   "before change when its null",
+        //   item,
+        //   checks[item],
+        //   chatResult[0][item]
+        // );
+        checks[item] = true;
+      } else {
+        if (item === "nftToken") {
+          // console.log("need to check nft token");
+        } else {
+          if (chatResult[0][item] >= parseFloat(checkResult[item].balance)) {
+            // console.log(
+            //   "before change when its equal or greater",
+            //   item,
+            //   checks[item],
+            //   chatResult[0][item]
+            // );
+            checks[item] = true;
+          }
+        }
+      }
+    }
+    // console.log("Checked out USER balances", checks);
+    let passedCheck = true;
+    for (let item in checks) {
+      if (!checks[item]) passedCheck = false;
+    }
+
+    return passedCheck;
+  };
+
   const queryMessages = async () => {
     const chatResult = await queryChat();
     // console.log("CHAT RESULT", chatResult);
@@ -49,12 +104,29 @@ const ChatMessages = ({ groupId }) => {
       setMessages(result);
     } else {
       console.log("CHAT IS PRIVATE");
-      setMessages(null);
+      const checkResult = await gatherTokenBalances();
+      // console.log("checked return", checkResult, chatResult);
+
+      const privilegeCheck = await checkUserPrivilege(checkResult, chatResult);
+
+      if (privilegeCheck) {
+        console.log("RESTRICTED show messages", privilegeCheck);
+        const Messages = Moralis.Object.extend("ChatMessages");
+        const query = new Moralis.Query(Messages);
+        query.equalTo("chatId", groupId);
+        const result = await query
+          .find()
+          .then(result => JSON.stringify(result, null, 2))
+          .then(result => JSON.parse(result));
+        setMessages(result);
+      } else {
+        console.log("RESTRICTED show messages", privilegeCheck);
+        setMessages(null);
+      }
     }
   };
 
   useEffect(() => {
-    console.log(groupId);
     queryMessages();
   }, [groupId, createdNew]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -62,7 +134,7 @@ const ChatMessages = ({ groupId }) => {
     return <></>;
   }
 
-  if (groupChatData[0].private && groupChatData) {
+  if (groupChatData[0].private && groupChatData && !messages) {
     return (
       <div
         style={{
