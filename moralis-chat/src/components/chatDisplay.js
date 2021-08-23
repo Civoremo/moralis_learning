@@ -25,6 +25,7 @@ const ChatDisplay = () => {
         display: "flex",
       }}
     >
+      {/* {console.log("GROUP ID", groupChatsQuery)} */}
       {groupChatsQuery.data ? (
         <div
           style={{

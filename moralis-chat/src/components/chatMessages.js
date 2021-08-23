@@ -22,15 +22,35 @@ const ChatMessages = ({ groupId }) => {
     }
   );
 
-  const queryMessages = async () => {
-    const Messages = Moralis.Object.extend("ChatMessages");
-    const query = new Moralis.Query(Messages);
-    query.equalTo("chatId", groupId);
+  const queryChat = async () => {
+    const Chat = Moralis.Object.extend("GroupChats");
+    const query = new Moralis.Query(Chat);
+    query.equalTo("objectId", groupId);
     const result = await query
       .find()
       .then(result => JSON.stringify(result, null, 2))
       .then(result => JSON.parse(result));
-    setMessages(result);
+
+    return result;
+  };
+
+  const queryMessages = async () => {
+    const chatResult = await queryChat();
+    console.log("CHAT RESULT", chatResult);
+
+    if (!chatResult[0].private) {
+      const Messages = Moralis.Object.extend("ChatMessages");
+      const query = new Moralis.Query(Messages);
+      query.equalTo("chatId", groupId);
+      const result = await query
+        .find()
+        .then(result => JSON.stringify(result, null, 2))
+        .then(result => JSON.parse(result));
+      setMessages(result);
+    } else {
+      console.log("CHAT IS PRIVATE");
+      setMessages(null);
+    }
   };
 
   useEffect(() => {

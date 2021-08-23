@@ -1,17 +1,22 @@
 /** @format */
 
 import React, { useState } from "react";
-import { useNewMoralisObject } from "react-moralis";
+import { useNewMoralisObject, useMoralis } from "react-moralis";
 import "boxicons";
 
 const NewMessage = ({ chatId }) => {
   const [newMessageInput, setNewMessageInput] = useState("");
   const saveNewMessage = useNewMoralisObject("ChatMessages");
+  const { user } = useMoralis();
 
   const sendMessage = e => {
     e.preventDefault();
     // console.log("send message", newMessageInput);
-    saveNewMessage.save({ message: newMessageInput, chatId: chatId });
+    saveNewMessage.save({
+      message: newMessageInput,
+      chatId: chatId,
+      userCreatedBy: user.get("ethAddress"),
+    });
     setNewMessageInput("");
   };
 
