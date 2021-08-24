@@ -32,3 +32,12 @@ async function newGroup(req) {
     return { response: "Chat already exists with that name!" };
   }
 }
+
+async function queryChat(req) {
+  let GroupChat = Moralis.Object.extend("GroupChats");
+  let query = new Moralis.Query(GroupChat);
+  query.equalTo("objectId", req.params.groupId);
+  let result = await query.find();
+
+  return JSON.stringify(result);
+}

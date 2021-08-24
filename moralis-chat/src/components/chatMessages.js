@@ -1,36 +1,27 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { useMoralisSubscription } from "react-moralis";
+import {
+  useMoralisSubscription,
+  // useMoralisQuery,
+  useMoralis,
+} from "react-moralis";
 import { Moralis } from "moralis";
 
 import NewMessage from "./newMessage";
 
 const ChatMessages = ({ groupId }) => {
-  // const { user } = useMoralis();
+  const { user } = useMoralis();
   const [messages, setMessages] = useState(null);
   const [createdNew, setCreatedNew] = useState(null);
   const [groupChatData, setGroupChatData] = useState(null);
 
-  useMoralisSubscription(
-    "ChatMessages",
-    q => q.equalTo("chatId", groupId),
-    [],
-    {
-      onCreate: data => {
-        setCreatedNew(JSON.stringify(data, null, 2));
-      },
-    }
-  );
+  useMoralisSubscription("ChatMessages", q => q, [], {
+    onCreate: data => setCreatedNew(JSON.stringify(data, null, 2)),
+  });
 
   const queryChat = async () => {
-    const Chat = Moralis.Object.extend("GroupChats");
-    const query = new Moralis.Query(Chat);
-    query.equalTo("objectId", groupId);
-    const result = await query
-      .find()
-      .then(result => JSON.stringify(result, null, 2))
-      .then(result => JSON.parse(result));
+    const result = await Moralis.Cloud.run("queryGroupChat", { groupId });
     setGroupChatData(result);
     return result;
   };
@@ -91,43 +82,45 @@ const ChatMessages = ({ groupId }) => {
 
   const queryMessages = async () => {
     const chatResult = await queryChat();
-    // console.log("CHAT RESULT", chatResult);
-
+    console.log("CHAT RESULT", chatResult);
+    setMessages(null);
     if (!chatResult[0].private) {
-      const Messages = Moralis.Object.extend("ChatMessages");
-      const query = new Moralis.Query(Messages);
-      query.equalTo("chatId", groupId);
-      const result = await query
-        .find()
-        .then(result => JSON.stringify(result, null, 2))
-        .then(result => JSON.parse(result));
+      let result = await Moralis.Cloud.run("queryMessages", {
+        chatId: groupId,
+      });
       setMessages(result);
     } else {
       console.log("CHAT IS PRIVATE");
-      const checkResult = await gatherTokenBalances();
-      // console.log("checked return", checkResult, chatResult);
+      setMessages(null);
+      // const checkResult = await gatherTokenBalances();
 
-      const privilegeCheck = await checkUserPrivilege(checkResult, chatResult);
+      // const privilegeCheck = await checkUserPrivilege(checkResult, chatResult);
 
-      if (privilegeCheck) {
-        console.log("RESTRICTED show messages", privilegeCheck);
-        const Messages = Moralis.Object.extend("ChatMessages");
-        const query = new Moralis.Query(Messages);
-        query.equalTo("chatId", groupId);
-        const result = await query
-          .find()
-          .then(result => JSON.stringify(result, null, 2))
-          .then(result => JSON.parse(result));
-        setMessages(result);
-      } else {
-        console.log("RESTRICTED show messages", privilegeCheck);
-        setMessages(null);
-      }
+      // if (privilegeCheck) {
+      //   console.log("RESTRICTED show messages", privilegeCheck);
+      //   const Messages = Moralis.Object.extend("ChatMessages");
+      //   const query = new Moralis.Query(Messages);
+      //   query.equalTo("chatId", groupId);
+      //   const result = await query
+      //     .find()
+      //     .then(result => JSON.stringify(result, null, 2))
+      //     .then(result => JSON.parse(result));
+      //   setMessages(result);
+      // } else {
+      //   console.log("RESTRICTED show messages", privilegeCheck);
+      //   // setMessages(null);
+      // }
     }
   };
 
   useEffect(() => {
     queryMessages();
+    // setMessages()
+    // console.log("refreshed", messagesQuery.data);
+    return () => {
+      console.log("should close live query");
+      // Moralis.LiveQuery.close();
+    };
   }, [groupId, createdNew]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!groupChatData) {
@@ -162,30 +155,97 @@ const ChatMessages = ({ groupId }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         // border: "1px solid red",
-        width: "55%",
+        width: "60%",
       }}
     >
       <div
+        // ref={msgRef}
         style={{
           overflowY: "scroll",
           //   border: "1px solid blue",
           height: "90%",
           maxHeight: "90%",
+          scrollSnapType: "mandatory",
         }}
       >
         {messages.map(message => {
           return (
-            <div
-              key={message.objectId}
-              style={{
-                padding: "5px 5px",
-                marginBottom: "5px",
-                border: "1px solid grey",
-                borderRadius: "5px",
-                fontSize: "12px",
-              }}
-            >
-              {message.message}
+            <div key={message.objectId}>
+              {message.userId === user.id ? (
+                <div>
+                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                    {user.get("username")}
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{
+                        width: "10%",
+                        height: "auto",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          border: "1px solid grey",
+                          borderRadius: "20px",
+                          marginRight: "10px",
+                          background: "grey",
+                        }}
+                      ></div>
+                    </div>
+                    <div
+                      style={{
+                        padding: "5px 5px",
+                        marginBottom: "5px",
+                        border: "1px solid grey",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        background: "lightgreen",
+                      }}
+                    >
+                      {message.message}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                    {user.get("username")}
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{
+                        width: "10%",
+                        height: "auto",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          border: "1px solid grey",
+                          borderRadius: "20px",
+                          marginRight: "10px",
+                          background: "grey",
+                        }}
+                      ></div>
+                    </div>
+                    <div
+                      style={{
+                        padding: "5px 5px",
+                        marginBottom: "5px",
+                        border: "1px solid grey",
+                        borderRadius: "5px",
+                        fontSize: "12px",
+                        background: "lightblue",
+                      }}
+                    >
+                      {message.message}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
