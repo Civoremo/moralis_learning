@@ -16,7 +16,7 @@ const NewMessage = ({ chatId }) => {
     let params = {
       message: newMessageInput,
       chatId: chatId,
-      userId: user.id,
+      userName: user.get("username"),
     };
 
     if (newMessageInput.length > 0) {

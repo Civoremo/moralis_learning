@@ -16,7 +16,7 @@ async function newGroup(req) {
     saveNewChat.set("name", req.params.name);
     saveNewChat.set("private", req.params.private);
     saveNewChat.set("token", req.params.token);
-    saveNewChat.set("userId", req.params.userId);
+    saveNewChat.set("userName", req.params.userName);
     // saveNewChat.set("tokenBalance", req.params.tokenBalance);
 
     let savedChat = await saveNewChat.save().then(
@@ -31,4 +31,13 @@ async function newGroup(req) {
   } else {
     return { response: "Chat already exists with that name!" };
   }
+}
+
+async function queryChat(req) {
+  let GroupChat = Moralis.Object.extend("GroupChats");
+  let query = new Moralis.Query(GroupChat);
+  query.equalTo("objectId", req.params.groupId);
+  let result = await query.find();
+
+  return JSON.stringify(result);
 }

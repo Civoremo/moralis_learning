@@ -15,7 +15,7 @@ async function saveMessage(req) {
 
   saveMessage.set("message", req.params.message);
   saveMessage.set("chatId", req.params.chatId);
-  saveMessage.set("userId", req.params.userId);
+  saveMessage.set("userName", req.params.userName);
 
   let saved = await saveMessage.save().then(
     savedMessage => {
