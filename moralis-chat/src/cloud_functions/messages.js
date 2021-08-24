@@ -1,8 +1,8 @@
 /** @format */
 
 async function queryMessages(req) {
-  //   const ChatMessages = Moralis.Object.extend("ChatMessages");
-  const query = new Moralis.Query("ChatMessages");
+  const ChatMessages = Moralis.Object.extend("ChatMessages");
+  const query = new Moralis.Query(ChatMessages);
   query.contains("chatId", req.params.chatId);
   const result = await query.find();
 
@@ -15,7 +15,7 @@ async function saveMessage(req) {
 
   saveMessage.set("message", req.params.message);
   saveMessage.set("chatId", req.params.chatId);
-  saveMessage.set("userId", req.params.userId);
+  saveMessage.set("userName", req.params.userName);
 
   let saved = await saveMessage.save().then(
     savedMessage => {

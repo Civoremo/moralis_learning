@@ -26,5 +26,12 @@ Moralis.Cloud.define("queryMessages", async req => {
 Moralis.Cloud.define("saveNewMessage", async req => {
   let result = await saveMessage(req);
 
+  return JSON.parse(result);
+});
+
+Moralis.Cloud.define("userData", async req => {
+  let result = await userInfo();
+
   return result;
+  // return JSON.parse(result);
 });

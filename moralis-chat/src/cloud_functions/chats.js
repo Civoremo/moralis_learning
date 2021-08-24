@@ -16,7 +16,7 @@ async function newGroup(req) {
     saveNewChat.set("name", req.params.name);
     saveNewChat.set("private", req.params.private);
     saveNewChat.set("token", req.params.token);
-    saveNewChat.set("userId", req.params.userId);
+    saveNewChat.set("userName", req.params.userName);
     // saveNewChat.set("tokenBalance", req.params.tokenBalance);
 
     let savedChat = await saveNewChat.save().then(

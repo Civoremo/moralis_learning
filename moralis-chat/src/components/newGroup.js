@@ -23,7 +23,7 @@ const NewGroup = () => {
     let params = {
       name: groupNameInput,
       token: restrictionsInput.token,
-      userId: user.id,
+      userName: user.get("username"),
     };
 
     if (restrictionCheckboxes.token) {

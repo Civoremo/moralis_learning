@@ -39,6 +39,18 @@ const Profile = () => {
     });
   };
 
+  const uploadImage = async (event, files) => {
+    const ProfileUpload = new Moralis.Object.extend("ProfileImage");
+    let saveImage = new ProfileUpload();
+    saveImage.set("userId", user.id);
+    saveImage.set("image", files[0]);
+    let result = await saveImage.save();
+
+    // const moarlisFile = new Moralis.File(files[0].name, files[0]);
+
+    console.log("saved image", JSON.stringify(result));
+  };
+
   if (!user) {
     return <>Loading</>;
   }
@@ -48,6 +60,11 @@ const Profile = () => {
       <div>{user.get("username")}</div>
 
       <form>
+        <input
+          type='file'
+          multiple={false}
+          onChange={event => uploadImage(event, event.target.files)}
+        />
         <input
           type='text'
           placeholder='Username'
