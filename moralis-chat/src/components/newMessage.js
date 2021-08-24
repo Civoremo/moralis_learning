@@ -1,23 +1,31 @@
 /** @format */
 
 import React, { useState } from "react";
-import { useNewMoralisObject, useMoralis } from "react-moralis";
+import { Moralis } from "moralis";
+import { useMoralis } from "react-moralis";
 import "boxicons";
 
 const NewMessage = ({ chatId }) => {
   const [newMessageInput, setNewMessageInput] = useState("");
-  const saveNewMessage = useNewMoralisObject("ChatMessages");
+  // const saveNewMessage = useNewMoralisObject("ChatMessages");
   const { user } = useMoralis();
 
-  const sendMessage = e => {
+  const sendMessage = async e => {
     e.preventDefault();
     // console.log("send message", newMessageInput);
-    saveNewMessage.save({
+    let params = {
       message: newMessageInput,
       chatId: chatId,
-      userCreatedBy: user.get("ethAddress"),
-    });
-    setNewMessageInput("");
+      userId: user.id,
+    };
+
+    if (newMessageInput.length > 0) {
+      let newMessage = await Moralis.Cloud.run("saveNewMessage", params);
+      console.log("NEW MESSAGE", newMessage);
+      setNewMessageInput("");
+    } else {
+      console.log("Type a message before submitting!");
+    }
   };
 
   return (

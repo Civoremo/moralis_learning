@@ -41,9 +41,6 @@ const ChatMessages = ({ groupId }) => {
     const polyBalance = await Moralis.Web3.getERC20({ chain: "polygon" });
     const userEthNFTs = await Moralis.Web3API.account.getNFTs();
 
-    const result = await Moralis.Cloud.run("test");
-    console.log("CLOUD RESULT", result);
-
     return { ethBalance, bscBalance, polyBalance, nftToken: userEthNFTs };
   };
 
