@@ -98,11 +98,23 @@ const ChatMessages = ({ groupId }) => {
             <div key={message.objectId}>
               {message.userName === user.get("username") ? (
                 <div>
-                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: "bolder",
+                      textAlign: "right",
+                    }}
+                  >
                     {/* {userInfoName(message.userId)} */}
                     {message.userName}
                   </div>
-                  <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginRight: "10px",
+                    }}
+                  >
                     <div
                       style={{
                         width: "5%",
@@ -133,11 +145,20 @@ const ChatMessages = ({ groupId }) => {
                 </div>
               ) : (
                 <div>
-                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: "bolder",
+                    }}
+                  >
                     {/* {userInfoName(message.userId)} */}
                     {message.userName}
                   </div>
-                  <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                  >
                     <div
                       style={{
                         width: "5%",

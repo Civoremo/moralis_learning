@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import "boxicons";
+import "../App.css";
 
 import NewGroup from "./newGroup";
 import Profile from "./profile";
+import { hidden } from "chalk";
 
 const GroupChats = ({ queryData, setGroupId }) => {
   const { logout } = useMoralis();
@@ -30,6 +32,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
   if (!groupChatsData) {
     return <>Waiting for data to load</>;
   }
+
   // let groups = JSON.parse(queryData);
 
   return (
@@ -38,25 +41,45 @@ const GroupChats = ({ queryData, setGroupId }) => {
       <div
         style={{
           overflowY: "scroll",
+          overflowX: "hidden",
           height: "400px",
-          maxHeight: "90%",
-          border: "1px solid red",
+          maxHeight: "380px",
+          // border: "1px solid red",
           marginLeft: "10px",
           zIndex: "5",
+          marginBottom: "20px",
         }}
       >
         {groupChatsData.map((group, index) => {
           // console.log("GROUPCHAT", group);
           return (
-            <div key={group.name} onClick={event => setGroupId(index)}>
-              {group.name}{" "}
-              {group.private ? (
-                <box-icon
-                  style={{ width: "15px", height: "auto" }}
-                  type='regular'
-                  name='lock'
-                />
-              ) : null}
+            <div
+              className='group-chat'
+              style={{
+                overflowX: "hidden",
+                marginLeft: "10px",
+                marginBottom: "5px",
+                fontSize: "16px",
+                fontWeight: "600",
+                borderBottom: "1px solid grey",
+                width: "100px",
+                maxWidth: "100px",
+                // color: "grey",
+                // textAlign: "center",
+              }}
+              key={group.name}
+              onClick={event => setGroupId(index)}
+            >
+              <div style={{ marginLeft: "10px" }}>
+                {group.name}{" "}
+                {group.private ? (
+                  <box-icon
+                    style={{ width: "15px", height: "auto" }}
+                    type='regular'
+                    name='lock'
+                  />
+                ) : null}
+              </div>
             </div>
           );
         })}
@@ -68,7 +91,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
             style={{
               position: "absolute",
               top: "-100px",
-              background: "grey",
+              background: "lightgrey",
               width: "150px",
               height: "100px",
               borderTopRightRadius: "10px",
@@ -87,7 +110,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
             style={{
               position: "absolute",
               top: "-100px",
-              background: "grey",
+              background: "lightgrey",
               width: "150px",
               height: "100px",
               borderTopRightRadius: "10px",
@@ -100,7 +123,8 @@ const GroupChats = ({ queryData, setGroupId }) => {
       </div>
       <div
         style={{
-          border: "2px solid blue",
+          // border: "2px solid blue",
+          borderTop: "1px solid grey",
           height: "30px",
           display: "flex",
           justifyContent: "space-around",
@@ -109,25 +133,40 @@ const GroupChats = ({ queryData, setGroupId }) => {
         }}
       >
         {groupSelector ? (
-          <box-icon
-            type='regular'
-            name='minus-circle'
-            onClick={event => addGroupModal(event)}
-          />
+          <span className='menu-button'>
+            <box-icon
+              type='regular'
+              name='minus-circle'
+              onClick={event => addGroupModal(event)}
+            />
+          </span>
         ) : (
-          <box-icon
-            type='regular'
-            name='plus-circle'
-            onClick={event => addGroupModal(event)}
-          />
+          <span className='menu-button'>
+            <box-icon
+              className='menu-button'
+              type='regular'
+              name='plus-circle'
+              onClick={event => addGroupModal(event)}
+            />
+          </span>
         )}
 
-        <box-icon type='regular' name='log-out' onClick={() => logout()} />
-        <box-icon
-          type='regular'
-          name='user'
-          onClick={event => showProfileModal(event)}
-        />
+        <span className='menu-button'>
+          <box-icon
+            className='menu-button'
+            type='regular'
+            name='log-out'
+            onClick={() => logout()}
+          />
+        </span>
+        <span className='menu-button'>
+          <box-icon
+            className='menu-button'
+            type='regular'
+            name='user'
+            onClick={event => showProfileModal(event)}
+          />
+        </span>
       </div>
     </div>
   );
