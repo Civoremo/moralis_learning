@@ -85,6 +85,16 @@ const ChatMessages = ({ groupId }) => {
       }}
     >
       <div
+        style={{
+          background: "#5F6368",
+          color: "#fff",
+          textAlign: "center",
+          marginBottom: "10px",
+        }}
+      >
+        {groupChatData[0].name}
+      </div>
+      <div
         // ref={msgRef}
         style={{
           overflowY: "scroll",
@@ -136,7 +146,7 @@ const ChatMessages = ({ groupId }) => {
                         border: "1px solid grey",
                         borderRadius: "5px",
                         fontSize: "12px",
-                        background: "lightgreen",
+                        background: "#D2D5AB",
                       }}
                     >
                       {message.message}
@@ -180,7 +190,7 @@ const ChatMessages = ({ groupId }) => {
                         border: "1px solid grey",
                         borderRadius: "5px",
                         fontSize: "12px",
-                        background: "lightblue",
+                        background: "#C1C0BC",
                       }}
                     >
                       {message.message}

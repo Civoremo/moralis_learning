@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useState } from "react";
+import ReactTooltip from "react-tooltip";
 import { Moralis } from "moralis";
 import { useMoralis } from "react-moralis";
 import "boxicons";
@@ -47,7 +48,14 @@ const NewMessage = ({ chatId }) => {
           onChange={event => setNewMessageInput(event.target.value)}
         />
         <div onClick={event => sendMessage(event)}>
-          <box-icon type='regular' name='send' />
+          <a data-tip data-for='sendButton'>
+            <span className='menu-button'>
+              <box-icon type='regular' name='send' />
+            </span>
+            <ReactTooltip id='sendButton' delayShow={700}>
+              <p>Send</p>
+            </ReactTooltip>
+          </a>
         </div>
       </form>
     </div>

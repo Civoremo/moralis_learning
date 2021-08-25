@@ -10,7 +10,7 @@ const Profile = () => {
 
   const checkForDuplicate = async e => {
     e.preventDefault();
-    if (userNameInput.length > 4) {
+    if (userNameInput.length >= 3) {
       const Users = Moralis.Object.extend("User");
       const query = new Moralis.Query(Users);
       query.contains("username", userNameInput);
@@ -47,8 +47,19 @@ const Profile = () => {
   return (
     <div>
       <div
-        style={{ textAlign: "center", margin: "10px 0", fontWeight: "bolder" }}
+        style={{
+          textAlign: "center",
+          margin: "10px 0",
+          padding: "0 10px",
+          fontWeight: "bolder",
+          // maxWidth: "100px",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          // border: "1px solid red",
+        }}
       >
+        {console.log(typeof user.get("username"))}
         {user.get("username")}
       </div>
 
