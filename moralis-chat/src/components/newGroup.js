@@ -7,14 +7,7 @@ import { useMoralis } from "react-moralis";
 
 const NewGroup = () => {
   const [groupNameInput, setGroupNameInput] = useState("");
-  const [restrictCheck, setRestrictCheck] = useState(false);
-  const [restrictionsInput, setRestrictionsInput] = useState({
-    name: groupNameInput,
-    token: "",
-  });
-  const [restrictionCheckboxes, setRestrictionCheckboxes] = useState({
-    token: false,
-  });
+  const [tokenRestrictionInput, setTokenRestrictionInput] = useState("");
   const { user } = useMoralis();
 
   const addNewGroup = async e => {
@@ -22,11 +15,11 @@ const NewGroup = () => {
 
     let params = {
       name: groupNameInput,
-      token: restrictionsInput.token,
+      token: tokenRestrictionInput,
       userName: user.get("username"),
     };
 
-    if (restrictionCheckboxes.token) {
+    if (tokenRestrictionInput.length > 0) {
       params = { ...params, private: true };
     } else {
       params = { ...params, private: false };
@@ -37,22 +30,9 @@ const NewGroup = () => {
         "addNewGroupChat",
         params
       );
-      console.log("NEW GROUP", saveNewGroupChat);
     } else {
       console.log("Chat Name is too short!");
     }
-  };
-
-  const showRestricted = () => {
-    // e.preventDefault();
-    setRestrictionsInput(restrictionsInput => ({
-      ...restrictionsInput,
-      token: "",
-    }));
-    setRestrictionCheckboxes(restrictionCheckboxes => ({
-      ...restrictionCheckboxes,
-      token: false,
-    }));
   };
 
   return (
@@ -78,15 +58,8 @@ const NewGroup = () => {
           style={{ width: "120px", maxWidth: "120px" }}
           type='text'
           placeholder='Token Restriction'
-          value={restrictionsInput.token || ""}
-          onChange={event =>
-            restrictionCheckboxes.token
-              ? setRestrictionsInput(restrictionsInput => ({
-                  ...restrictionsInput,
-                  token: event.target.value,
-                }))
-              : null
-          }
+          value={tokenRestrictionInput || ""}
+          onChange={event => setTokenRestrictionInput(event.target.value)}
         />
         <button
           style={{ marginTop: "5px" }}

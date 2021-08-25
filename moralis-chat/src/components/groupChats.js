@@ -70,8 +70,14 @@ const GroupChats = ({ queryData, setGroupId }) => {
               key={group.name}
               onClick={event => setGroupId(index)}
             >
-              <div style={{ marginLeft: "10px" }}>
-                {group.name}{" "}
+              <div
+                style={{
+                  marginLeft: "10px",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {group.private ? (
                   <box-icon
                     style={{ width: "15px", height: "auto" }}
@@ -79,6 +85,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
                     name='lock'
                   />
                 ) : null}
+                {group.name}{" "}
               </div>
             </div>
           );
