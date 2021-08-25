@@ -31,7 +31,7 @@ const ChatDisplay = () => {
           style={{
             width: "30%",
             borderRight: "1px solid grey",
-            margin: "0 20px",
+            // margin: "0 20px",
           }}
         >
           <GroupChats
@@ -49,7 +49,7 @@ const ChatDisplay = () => {
         <>
           <div
             style={{
-              width: "55%",
+              width: "65%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -59,8 +59,8 @@ const ChatDisplay = () => {
             }}
           >
             <div>Welcome to Web3 Chat</div>
-            <div>built using</div>
-            <div>Moralis</div>
+            <div style={{ fontSize: "12px" }}>built using</div>
+            <div>Moralis.io</div>
           </div>
         </>
       )}

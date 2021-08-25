@@ -79,7 +79,9 @@ const ChatMessages = ({ groupId }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         // border: "1px solid red",
+        paddingTop: "10px",
         width: "60%",
+        marginLeft: "20px",
       }}
     >
       <div
@@ -89,7 +91,6 @@ const ChatMessages = ({ groupId }) => {
           //   border: "1px solid blue",
           height: "90%",
           maxHeight: "90%",
-          scrollSnapType: "mandatory",
         }}
       >
         {messages.map(message => {
@@ -97,11 +98,23 @@ const ChatMessages = ({ groupId }) => {
             <div key={message.objectId}>
               {message.userName === user.get("username") ? (
                 <div>
-                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: "bolder",
+                      textAlign: "right",
+                    }}
+                  >
                     {/* {userInfoName(message.userId)} */}
                     {message.userName}
                   </div>
-                  <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginRight: "10px",
+                    }}
+                  >
                     <div
                       style={{
                         width: "5%",
@@ -132,11 +145,20 @@ const ChatMessages = ({ groupId }) => {
                 </div>
               ) : (
                 <div>
-                  <div style={{ fontSize: "10px", fontWeight: "bolder" }}>
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: "bolder",
+                    }}
+                  >
                     {/* {userInfoName(message.userId)} */}
                     {message.userName}
                   </div>
-                  <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                  >
                     <div
                       style={{
                         width: "5%",
