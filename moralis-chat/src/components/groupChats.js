@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import ReactTooltip from "react-tooltip";
 import { useMoralis } from "react-moralis";
 import "boxicons";
 import "../App.css";
@@ -70,16 +71,51 @@ const GroupChats = ({ queryData, setGroupId }) => {
               key={group.name}
               onClick={event => setGroupId(index)}
             >
-              <div style={{ marginLeft: "10px" }}>
-                {group.name}{" "}
-                {group.private ? (
-                  <box-icon
-                    style={{ width: "15px", height: "auto" }}
-                    type='regular'
-                    name='lock'
-                  />
-                ) : null}
-              </div>
+              <a data-tip data-for={`chat-${group.name}`}>
+                <ReactTooltip id={`chat-${group.name}`} delayShow={700}>
+                  {group.private ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p>Private</p>
+                      <p>{group.name}</p>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p>{group.name}</p>
+                    </div>
+                  )}
+                </ReactTooltip>
+                <div
+                  style={{
+                    marginLeft: "10px",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {group.private ? (
+                    <box-icon
+                      style={{ width: "15px", height: "auto" }}
+                      type='regular'
+                      name='lock'
+                    />
+                  ) : null}
+                  {group.name}{" "}
+                </div>
+              </a>
             </div>
           );
         })}
@@ -133,40 +169,61 @@ const GroupChats = ({ queryData, setGroupId }) => {
         }}
       >
         {groupSelector ? (
-          <span className='menu-button'>
-            <box-icon
-              type='regular'
-              name='minus-circle'
-              onClick={event => addGroupModal(event)}
-            />
-          </span>
+          <a data-tip data-for='closeAddButton'>
+            <span className='menu-button'>
+              <box-icon
+                type='regular'
+                name='minus-circle'
+                onClick={event => addGroupModal(event)}
+              />
+            </span>
+            <ReactTooltip id='closeAddButton' delayShow={700}>
+              <p>Close</p>
+            </ReactTooltip>
+          </a>
         ) : (
+          <a data-tip data-for='openAddButton'>
+            <span className='menu-button'>
+              <box-icon
+                className='menu-button'
+                type='regular'
+                name='plus-circle'
+                onClick={event => addGroupModal(event)}
+              />
+            </span>
+            <ReactTooltip id='openAddButton' delayShow={700}>
+              <p>Open</p>
+            </ReactTooltip>
+          </a>
+        )}
+
+        <a data-tip data-for='logoutButton'>
           <span className='menu-button'>
             <box-icon
               className='menu-button'
               type='regular'
-              name='plus-circle'
-              onClick={event => addGroupModal(event)}
+              name='log-out'
+              onClick={() => logout()}
             />
           </span>
-        )}
+          <ReactTooltip id='logoutButton' delayShow={700}>
+            <p>Logout</p>
+          </ReactTooltip>
+        </a>
 
-        <span className='menu-button'>
-          <box-icon
-            className='menu-button'
-            type='regular'
-            name='log-out'
-            onClick={() => logout()}
-          />
-        </span>
-        <span className='menu-button'>
-          <box-icon
-            className='menu-button'
-            type='regular'
-            name='user'
-            onClick={event => showProfileModal(event)}
-          />
-        </span>
+        <a data-tip data-for='profileButton'>
+          <span className='menu-button'>
+            <box-icon
+              className='menu-button'
+              type='regular'
+              name='user'
+              onClick={event => showProfileModal(event)}
+            />
+          </span>
+          <ReactTooltip id='profileButton' delayShow={700}>
+            <p>Profile</p>
+          </ReactTooltip>
+        </a>
       </div>
     </div>
   );
