@@ -57,61 +57,44 @@ const NewGroup = () => {
 
   return (
     <div>
-      <div>
-        <form onSubmit={event => addNewGroup(event)}>
-          <input
-            type='text'
-            placeholder='Enter New Group Name'
-            value={groupNameInput}
-            onChange={event => setGroupNameInput(event.target.value)}
-          />
-          {restrictCheck ? (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div>
-                <input
-                  type='checkbox'
-                  id='token'
-                  name='token'
-                  onChange={event =>
-                    setRestrictionCheckboxes(restrictionCheckboxes => ({
-                      ...restrictionCheckboxes,
-                      token: !restrictionCheckboxes.nft,
-                    }))
-                  }
-                />
-                <input
-                  type='text'
-                  placeholder='Token Address'
-                  value={restrictionsInput.token || ""}
-                  onChange={event =>
-                    restrictionCheckboxes.token
-                      ? setRestrictionsInput(restrictionsInput => ({
-                          ...restrictionsInput,
-                          token: event.target.value,
-                        }))
-                      : null
-                  }
-                />
-              </div>
-            </div>
-          ) : null}
-          <button onClick={event => addNewGroup(event)}>Add Group</button>
-          {!restrictCheck ? (
-            <>
-              <input
-                type='checkbox'
-                id='restriction'
-                name='restrictBox'
-                onChange={() => {
-                  setRestrictCheck(restrictCheck => !restrictCheck);
-                  showRestricted();
-                }}
-              />
-              <label htmlFor='restrictBox'>Restrictions</label>
-            </>
-          ) : null}
-        </form>
-      </div>
+      <form
+        onSubmit={event => addNewGroup(event)}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-around",
+          height: "100px",
+        }}
+      >
+        <input
+          style={{ width: "120px", maxWidth: "120px" }}
+          type='text'
+          placeholder='Chat Name'
+          value={groupNameInput}
+          onChange={event => setGroupNameInput(event.target.value)}
+        />
+        <input
+          style={{ width: "120px", maxWidth: "120px" }}
+          type='text'
+          placeholder='Token Restriction'
+          value={restrictionsInput.token || ""}
+          onChange={event =>
+            restrictionCheckboxes.token
+              ? setRestrictionsInput(restrictionsInput => ({
+                  ...restrictionsInput,
+                  token: event.target.value,
+                }))
+              : null
+          }
+        />
+        <button
+          style={{ marginTop: "5px" }}
+          onClick={event => addNewGroup(event)}
+        >
+          Add Group
+        </button>
+      </form>
     </div>
   );
 };

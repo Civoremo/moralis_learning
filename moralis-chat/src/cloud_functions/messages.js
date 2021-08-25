@@ -4,6 +4,7 @@ async function queryMessages(req) {
   const ChatMessages = Moralis.Object.extend("ChatMessages");
   const query = new Moralis.Query(ChatMessages);
   query.contains("chatId", req.params.chatId);
+  query.descending("createdAt");
   const result = await query.find();
 
   return JSON.stringify(result);

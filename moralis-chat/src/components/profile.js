@@ -26,6 +26,7 @@ const Profile = () => {
 
       if (result.length === 0) {
         updateUserData(result);
+        setUserNameInput("");
       }
     } else {
       console.log("username is to short");
@@ -39,39 +40,40 @@ const Profile = () => {
     });
   };
 
-  const uploadImage = async (event, files) => {
-    const ProfileUpload = new Moralis.Object.extend("ProfileImage");
-    let saveImage = new ProfileUpload();
-    saveImage.set("userId", user.id);
-    saveImage.set("image", files[0]);
-    let result = await saveImage.save();
-
-    // const moarlisFile = new Moralis.File(files[0].name, files[0]);
-
-    console.log("saved image", JSON.stringify(result));
-  };
-
   if (!user) {
     return <>Loading</>;
   }
 
   return (
     <div>
-      <div>{user.get("username")}</div>
+      <div
+        style={{ textAlign: "center", margin: "10px 0", fontWeight: "bolder" }}
+      >
+        {user.get("username")}
+      </div>
 
-      <form>
+      <form
+        onSubmit={event => checkForDuplicate(event)}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
         <input
-          type='file'
-          multiple={false}
-          onChange={event => uploadImage(event, event.target.files)}
-        />
-        <input
+          style={{ width: "120px", maxWidth: "120px" }}
           type='text'
           placeholder='Username'
           value={userNameInput}
           onChange={event => setUserNameInput(event.target.value)}
         />
-        <button onClick={event => checkForDuplicate(event)}>Update</button>
+        <button
+          style={{ marginTop: "5px" }}
+          onClick={event => checkForDuplicate(event)}
+        >
+          Update
+        </button>
       </form>
     </div>
   );

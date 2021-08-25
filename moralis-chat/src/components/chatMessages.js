@@ -79,7 +79,9 @@ const ChatMessages = ({ groupId }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         // border: "1px solid red",
+        paddingTop: "10px",
         width: "60%",
+        marginLeft: "20px",
       }}
     >
       <div
@@ -89,7 +91,6 @@ const ChatMessages = ({ groupId }) => {
           //   border: "1px solid blue",
           height: "90%",
           maxHeight: "90%",
-          scrollSnapType: "mandatory",
         }}
       >
         {messages.map(message => {

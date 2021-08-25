@@ -24,10 +24,17 @@ const Home = () => {
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "1px solid red",
+        height: "100vh",
+      }}
     >
       {console.log("user info", user.get("ethAddress"))}
-      <div
+      {/* <div
         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
       >
         <h1>Welcome {user.get("username")}</h1>
@@ -52,7 +59,7 @@ const Home = () => {
       <h3>Create New Group</h3>
       <NewGroup />
       <hr style={{ width: "100vw" }} />
-      <br />
+      <br /> */}
       <ChatDisplay />
     </div>
   );
