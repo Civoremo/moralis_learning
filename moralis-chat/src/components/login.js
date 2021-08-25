@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect } from "react";
+import { Moralis } from "moralis";
 import { useMoralis } from "react-moralis";
 import { useHistory } from "react-router-dom";
 
@@ -8,11 +9,12 @@ const Login = () => {
   let historyRedirect = useHistory();
   const { authenticate, isAuthenticated } = useMoralis();
 
-  const doAuthentication = () => {
+  const doAuthentication = async () => {
     authenticate();
   };
 
   useEffect(() => {
+    console.log(isAuthenticated);
     if (isAuthenticated) {
       historyRedirect.push("/dashboard");
     }

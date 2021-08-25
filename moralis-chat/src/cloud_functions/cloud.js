@@ -33,5 +33,4 @@ Moralis.Cloud.define("userData", async req => {
   let result = await userInfo();
 
   return result;
-  // return JSON.parse(result);
 });

@@ -94,6 +94,7 @@ const GroupChats = ({ queryData, setGroupId }) => {
                         alignItems: "center",
                       }}
                     >
+                      <p>Public</p>
                       <p>{group.name}</p>
                     </div>
                   )}
