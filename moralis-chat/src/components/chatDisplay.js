@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useMoralisQuery } from "react-moralis";
+import moralisWhiteBadge from "../assets/Powered-by-Moralis-Badge-Glass.svg";
 
 import GroupChats from "./groupChats";
 import ChatMessages from "./chatMessages";
@@ -23,6 +24,7 @@ const ChatDisplay = () => {
         height: "500px",
         border: "1px solid grey",
         display: "flex",
+        background: "#fff",
       }}
     >
       {/* {console.log("GROUP ID", groupChatsQuery)} */}
@@ -59,8 +61,15 @@ const ChatDisplay = () => {
             }}
           >
             <div>Welcome to Web3 Chat</div>
-            <div style={{ fontSize: "12px" }}>built using</div>
-            <div>Moralis.io</div>
+            <a href='' alt='moralis.io brand badge'>
+              <img
+                src={moralisWhiteBadge}
+                target='_blank'
+                rel='noopener noreferrer'
+              />
+            </a>
+            {/* <div style={{ fontSize: "12px" }}>built using</div> */}
+            {/* <div>Moralis.io</div> */}
           </div>
         </>
       )}

@@ -29,8 +29,9 @@ const Home = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        border: "1px solid red",
+        // border: "1px solid red",
         height: "100vh",
+        background: "#041836",
       }}
     >
       {console.log("user info", user.get("ethAddress"))}
