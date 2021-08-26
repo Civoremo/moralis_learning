@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import Moralis from "moralis";
 import { useMoralisQuery } from "react-moralis";
 import moralisWhiteBadge from "../assets/Powered-by-Moralis-Badge-Glass.svg";
 
@@ -12,9 +13,22 @@ const ChatDisplay = () => {
     live: true,
   });
   const [groupChatId, setGroupChatId] = useState(null);
+  const [nativeBalance, setNativeBalance] = useState(null);
+  const [tokenBalance, setTokenBalance] = useState(null);
+  const [nftBalance, setNftBalance] = useState(null);
+
+  const userNativeBalance = async () => {
+    const userNativeBalance = await Moralis.Web3API.account.getNativeBalance();
+    const userTokenBalance = await Moralis.Web3API.account.getTokenBalances();
+    const userEthNFTs = await Moralis.Web3API.account.getNFTs();
+    setNativeBalance(userNativeBalance);
+    setTokenBalance(userTokenBalance);
+    setNftBalance(userEthNFTs);
+  };
 
   useEffect(() => {
     // console.log("new group chat was created");
+    // userNativeBalance();
   }, [groupChatsQuery.data]);
 
   return (
@@ -49,6 +63,12 @@ const ChatDisplay = () => {
         <ChatMessages groupId={groupChatsQuery.data[groupChatId].id} />
       ) : (
         <>
+          {/* {console.log(
+            "native balance",
+            nativeBalance,
+            tokenBalance,
+            nftBalance
+          )} */}
           <div
             style={{
               width: "65%",
