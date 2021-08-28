@@ -34,3 +34,9 @@ Moralis.Cloud.define("userData", async req => {
 
   return result;
 });
+
+Moralis.Cloud.define("userBalances", async req => {
+  let result = await userBalances(req);
+
+  return result;
+});

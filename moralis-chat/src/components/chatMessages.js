@@ -22,6 +22,8 @@ const ChatMessages = ({ groupId }) => {
 
   const queryChat = async () => {
     const result = await Moralis.Cloud.run("queryGroupChat", { groupId });
+    // const balances = await Moralis.Cloud.run("userBalances");
+    // console.log("BALANCES", balances);
     setGroupChatData(result);
     return result;
   };
