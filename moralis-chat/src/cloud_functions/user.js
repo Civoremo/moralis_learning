@@ -15,3 +15,11 @@ async function userInfo(req) {
   return result;
   //   return JSON.stringify(result);
 }
+
+async function userBalances(req) {
+  const balances = await Moralis.Web3API.account.getTokenBalances({
+    chain: "kovan",
+  });
+
+  return balances;
+}
