@@ -11,6 +11,7 @@ function Home() {
   const { isAuthenticated, user, logout } = useMoralis();
   const [nftsData, setNftsData] = useState(null);
   const [nftsImageData, setNftsImageData] = useState([]);
+  const [nftBlobs, setNftBlobs] = useState(null);
 
   const fetchUserNFTs = async () => {
     console.log("fetching nfts");
@@ -46,6 +47,21 @@ function Home() {
       }
     } catch (error) {
     } finally {
+      console.log("meta data ", nftMetadata);
+      let svgArray = [];
+      for await (let nft of nftMetadata) {
+        if (nft.image) {
+          // console.log("image\n", nft.image);
+        } else {
+          let blob = await new Blob([nft.image_data], {
+            type: "image/svg+xml;charset=utf=8",
+          });
+          let url = await URL.createObjectURL(blob);
+          svgArray.push(url);
+        }
+      }
+      console.log("COMPLETE SVG", svgArray);
+      setNftBlobs(svgArray);
       setNftsImageData(nftMetadata);
     }
   };
@@ -72,13 +88,12 @@ function Home() {
   return (
     <div className='App'>
       {/* {console.log("tokenIDs", tokenIds)} */}
-      {console.log("NFTS", nftsData)}
-      {console.log("IMAGES\n", nftsImageData)}
+      {/* {console.log("NFTS", nftsData)} */}
+      {/* {console.log("IMAGES\n", nftsImageData)} */}
       <div>Home component</div>
       <button onClick={() => logout()}>Logout</button>
       <hr />
       <br />
-      {/* <div>{user.get("ethAddress")}</div> */}
       <button onClick={() => fetchUserNFTs()}>Fetch User NFTs</button>
 
       <br />
@@ -86,24 +101,32 @@ function Home() {
       {nftsImageData.length > 0 ? (
         <>
           {nftsImageData.map(image => {
-            // let imageFile;
-            // if (!image.image) {
-            //   console.log(image.name);
-            //   imageFile = new Blob(image.image_data, {
-            //     type: "image/svg+xml;charset=utf=8",
-            //   });
-            // }
             return (
               <>
-                {image.image_data ? (
-                  // <img
-                  //   key={image.name + image.description + image.external_url}
-                  //   style={{ width: "100px", height: "100px" }}
-                  //   src={imageFile}
-                  //   alt={image.name}
-                  // />
-                  <svg {...image.image_data} />
-                ) : null}
+                {image.image ? (
+                  <>
+                    {console.log("image src")}
+                    <img
+                      style={{ width: "200px", height: "auto" }}
+                      src={image.image}
+                      alt={image.external_url}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </>
+            );
+          })}
+          {nftBlobs.map(nft => {
+            return (
+              <>
+                <img
+                  style={{ width: "200px", height: "auto" }}
+                  src={nft}
+                  alt='nft blob'
+                />
+                ;
               </>
             );
           })}
